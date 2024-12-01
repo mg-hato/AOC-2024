@@ -1,0 +1,11 @@
+0 4294967295 /// right value is u32::MAX
+2 3
+
+######
+Part 1:
+We will have 0 vs 3 => 3
+and 2 vs u32:MAX => u32::MAX - 2
+total: u32::MAX + 1
+thus we expect overflow error
+
+Part 2: 0

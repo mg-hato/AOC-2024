@@ -1,0 +1,4 @@
+10 15
+20 16
+0 4294967296 /// right value is u32::MAX + 1, i.e. cannot be stored in u32
+2 3

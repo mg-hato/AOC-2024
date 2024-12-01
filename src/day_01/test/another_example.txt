@@ -1,0 +1,15 @@
+10 20
+23 10
+15 20
+
+#########
+Part 1:
+it is   10, 15, 23
+against 10, 20, 20
+diffs:   0,  5,  3
+total: 8
+
+Part 2:
+10 appears once => +10
+15 and 23 do not appear => no contribution
+expected: 10
