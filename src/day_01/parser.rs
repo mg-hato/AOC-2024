@@ -56,8 +56,8 @@ impl NumberPairListParser {
 
 
 impl Parse<NumberPairList> for NumberPairListParser {
-    fn parse(&self, lines: VecLine) -> Result<NumberPairList, String> {
-        let vector_of_results = lines.iter()
+    fn parse(&self, vec_line: VecLine) -> Result<NumberPairList, String> {
+        let vector_of_results = vec_line.lines.iter()
             .map(|line|self.parse_single_line(line))
             .collect();
         result::collect(vector_of_results).map(NumberPairList::new)

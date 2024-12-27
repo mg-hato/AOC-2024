@@ -13,7 +13,7 @@ impl Read for SimpleFileReader {
                     .enumerate()
                     .map(|(line_num, line_str)| Line::new(String::from(line_str), line_num + 1))
                     .collect();
-                Ok(lines)
+                Ok(VecLine::new(lines))
             }
             Err(err) => Err(format!("Error when reading the file '{}': {}", input_file_path, err))
         }

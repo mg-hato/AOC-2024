@@ -13,15 +13,15 @@ pub mod suite {
         let reader = SimpleFileReader::new();
         let result = reader.read(&filepath);
         assert!(result.is_ok());
-        let lines = result.unwrap();
-        assert_eq!(lines.len(), 4);
+        let vec_lines = result.unwrap();
+        assert_eq!(vec_lines.lines.len(), 4);
     }
 
-    fn test_sanitised_file_reader_helper<R>(sfr: R, expected: VecLine) where R: Read + 'static {
+    fn test_sanitised_file_reader_helper<R>(sfr: R, expected: Vec<Line>) where R: Read + 'static {
         let res = sfr.read(&resolve_filepath(TESTFILE_RELATIVE_PATH));
         assert!(res.is_ok());
         let lines = res.unwrap();
-        assert_eq!(lines, expected);
+        assert_eq!(lines, VecLine::new(expected));
     }
 
     #[test]

@@ -18,13 +18,15 @@ pub mod reading_only {
         Line::new(trimmed, line.number())
     }
 
-    pub fn apply(line_comment: &LineComment, lines: VecLine) -> VecLine {
-        match line_comment {
+    pub fn apply(line_comment: &LineComment, vec_line: VecLine) -> VecLine {
+        let lines = vec_line.lines;
+        let processed_lines = match line_comment {
             LineComment::Pattern(pattern) => lines.into_iter()
                 .map(|line| trim_comment(line, pattern))
                 .collect(),
 
             _ => lines
-        }
+        };
+        VecLine::new(processed_lines)
     }
 }

@@ -54,8 +54,8 @@ impl LevelReportsParser {
 }
 
 impl Parse<LevelReports> for LevelReportsParser {
-    fn parse(&self, lines: crate::reader::VecLine) -> Result<LevelReports, String> {
-        result::collect(lines.into_iter().map(|line|self.parse_line(line)).collect())
+    fn parse(&self, vec_line: crate::reader::VecLine) -> Result<LevelReports, String> {
+        result::collect(vec_line.lines.into_iter().map(|line|self.parse_line(line)).collect())
             .map(LevelReports::new)
     }
 }
