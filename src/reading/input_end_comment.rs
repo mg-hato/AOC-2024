@@ -27,15 +27,17 @@ pub mod reading_only {
         splits
     }
 
-    pub fn apply(input_end_comment: &InputEndComment, lines: VecLine) -> VecLine
+    pub fn apply(input_end_comment: &InputEndComment, vec_line: VecLine) -> VecLine
     {
-        match input_end_comment {
+        let lines = vec_line.lines;
+        let processed_lines = match input_end_comment {
             InputEndComment::Pattern(pattern) => lines.into_iter()
                 .flat_map(|line| split_line(line, pattern))
                 .map_while(|opt| opt)
                 .collect(),
 
             _ => lines
-        }
+        };
+        VecLine::new(processed_lines)
     }
 }

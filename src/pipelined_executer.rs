@@ -31,8 +31,8 @@ impl <T> Read for PipelinedExecuter<T>  where T: Eq + Display + Clone + Debug {
 }
 
 impl <T> Parse<T> for PipelinedExecuter<T>  where T: Eq + Display + Clone + Debug {
-    fn parse(&self, lines: crate::reader::VecLine) -> Result<T, String> {
-        self.parser.parse(lines)
+    fn parse(&self, vec_line: crate::reader::VecLine) -> Result<T, String> {
+        self.parser.parse(vec_line)
     }
 }
 

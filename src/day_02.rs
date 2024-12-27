@@ -30,11 +30,11 @@ fn make_pipeline(is_part_2: bool) -> Result<PipelinedExecuter<models::LevelRepor
         let absdiff = current.abs_diff(next);
         1 <= absdiff && absdiff <= 3
     };
+    
     match is_part_2 {
         false => make_pipeline_with(SafeLevelReportCounter::new(safety_fn)),
         true => make_pipeline_with(DampenedSafeLevelReportCounter::new(safety_fn)),
     }
-    
 }
 
 
