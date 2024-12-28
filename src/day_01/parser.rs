@@ -47,9 +47,9 @@ impl NumberPairListParser {
     
     fn parse_single_line(&self, line: &Line) -> Result<NumberPair, String>
     {
-        match get_captures(&self.re, &line.text()) {
-            Some(v) if v.len() == 3 => Self::parse_number_pair(&v[1], &v[2], line.number()),
-            _ => Err(error::parse_line_error(line.number())),
+        match get_captures(&self.re, &line.textf()) {
+            Some(v) if v.len() == 3 => Self::parse_number_pair(&v[1], &v[2], line.numberf()),
+            _ => Err(error::parse_line_error(line.numberf())),
         }
     }
 }

@@ -11,8 +11,8 @@ pub trait Read {
 /// A line is some text read from a file, and the row number of the line inside the file
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Line {
-    text: String,
-    number: usize,
+    pub text: String,
+    pub number: usize,
 }
 
 impl Line {
@@ -20,11 +20,11 @@ impl Line {
         Line { text, number }
     }
 
-    pub fn text(&self) -> String {
+    pub fn textf(&self) -> String {
         self.text.to_owned()
     }
 
-    pub fn number(&self) -> usize {
+    pub fn numberf(&self) -> usize {
         self.number
     }
 }

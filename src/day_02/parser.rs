@@ -38,13 +38,13 @@ impl LevelReportsParser {
     }
 
     fn parse_line(&self, line: Line) -> Result<LevelReport, String> {
-        if !self.line_re.is_match(&line.text()) {
-            Err(error::parse_line_error(line.number()))
+        if !self.line_re.is_match(&line.textf()) {
+            Err(error::parse_line_error(line.numberf()))
         } else {
-            let parsed_numbers = line.text()
+            let parsed_numbers = line.textf()
                 .split(" ")
                 .filter(|word| word.len() > 0)
-                .map(|word|Self::parse_num(word, line.number()))
+                .map(|word|Self::parse_num(word, line.numberf()))
                 .collect();
 
             result::collect(parsed_numbers)

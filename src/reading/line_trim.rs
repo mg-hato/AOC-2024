@@ -14,7 +14,7 @@ pub mod reading_only {
 
     fn apply_trim_fn(lines: Vec<Line>, trim_fn: Box<dyn Fn(String) -> String>) -> Vec<Line> {
         lines.into_iter()
-            .map(|line| Line::new(trim_fn(line.text()), line.number()))
+            .map(|line| Line::new(trim_fn(line.textf()), line.numberf()))
             .collect()
     }
 

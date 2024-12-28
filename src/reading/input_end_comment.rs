@@ -15,8 +15,8 @@ pub mod reading_only {
     use super::*;
 
     fn split_line(line: Line, pattern: &String) -> Vec<Option<Line>> {
-        let line_number = line.number();
-        let mut splits : Vec<_> = line.text().split(pattern)
+        let line_number = line.numberf();
+        let mut splits : Vec<_> = line.textf().split(pattern)
             .map(|s| Some(Line::new(String::from(s), line_number))) 
             .collect();
 
