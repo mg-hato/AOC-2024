@@ -54,8 +54,8 @@ impl MulExtractor {
     }
 
     fn extract_instructions(&self, line: &Line) -> Vec<Result<Instruction, String>> {
-        self.mul_re.captures_iter(&line.text())
-            .map(|captures|Self::resolve_instruction(captures, line.number()))
+        self.mul_re.captures_iter(&line.textf())
+            .map(|captures|Self::resolve_instruction(captures, line.numberf()))
             .collect()
     }
 

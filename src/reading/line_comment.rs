@@ -14,8 +14,8 @@ pub mod reading_only {
     use super::*;
 
     fn trim_comment(line: Line, pattern: &String) -> Line {
-        let trimmed = line.text().split(pattern).map(String::from).collect::<Vec<_>>()[0].clone();
-        Line::new(trimmed, line.number())
+        let trimmed = line.textf().split(pattern).map(String::from).collect::<Vec<_>>()[0].clone();
+        Line::new(trimmed, line.numberf())
     }
 
     pub fn apply(line_comment: &LineComment, vec_line: VecLine) -> VecLine {

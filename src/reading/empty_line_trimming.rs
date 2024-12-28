@@ -14,7 +14,7 @@ pub mod reading_only {
     use super::*;
 
     fn is_empty_line(line: &Line) -> bool {
-        line.text().trim().len() == 0
+        line.textf().trim().len() == 0
     }
 
     fn trim_start(lines: Vec<Line>) -> Vec<Line> {
