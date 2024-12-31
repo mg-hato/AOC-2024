@@ -1,0 +1,12 @@
+1|2
+2|3
+3|4
+4|5
+5|1
+
+1,2,4
+3,1
+#####
+
+The goal of this test is to see that verifier does not like even number on print row i.e. [3,1].
+Because, what would be defined as the "middle" page of such sequence?
