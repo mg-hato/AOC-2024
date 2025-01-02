@@ -1,0 +1,19 @@
+1|2
+2|3
+3|4
+4|5
+5|1
+
+1,2,4
+3,5,1
+1,2,3,4,5
+
+##########
+in this example effectively we have a penthagon shaped relationship.
+1 goes to 2, 2 goes to 3, ... , 5 goes back to 1.
+Naturally, this is very cyclical.
+
+For part 1: [1,2,4] and [3,5,1] is correctly ordered (i.e. it does not violate any rule)
+
+For part 2, we clearly have an issue that forming DAG would not work (because it is not acyclical, not a DAG).
+So we expect that error to be reported
