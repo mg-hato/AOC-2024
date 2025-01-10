@@ -9,6 +9,7 @@ mod day_03;
 mod day_04;
 mod day_05;
 mod day_06;
+mod day_07;
 mod executer;
 mod reader;
 mod pipelined_executer;
@@ -31,6 +32,7 @@ fn create_executer_manager() -> Result<ExecuterManager, String> {
         .and_then(day_04::register)
         .and_then(day_05::register)
         .and_then(day_06::register)
+        .and_then(day_07::register)
 }
 
 fn report_outcome(outcome: Result<Answer, String>) {
