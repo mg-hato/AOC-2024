@@ -1,13 +1,13 @@
 use std::collections::HashSet;
 
-use crate::{answer::{Answer, DisplayableAnswer}, solver::Solve};
+use crate::{answer::{Answer, DisplayableAnswer}, helper::table::Table, solver::Solve};
 
-use super::{map_analyser::MapAnalyser, models::LaboratoryMap};
+use super::{map_analyser::MapAnalyser, models::LaboratoryMapField};
 
 pub struct DistinctVisitingPositionsCounter;
 
-impl Solve<LaboratoryMap> for DistinctVisitingPositionsCounter {
-    fn solve(&self, input: LaboratoryMap) -> Result<Answer, String> {
+impl Solve<Table<LaboratoryMapField>> for DistinctVisitingPositionsCounter {
+    fn solve(&self, input: Table<LaboratoryMapField>) -> Result<Answer, String> {
         MapAnalyser::new(input)
             .and_then(|mut analyser|analyser.perform_analysis())
             .and_then(|path|match path.is_empty() {

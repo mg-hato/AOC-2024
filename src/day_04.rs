@@ -1,29 +1,39 @@
 use self::cross_mas_finder::CrossMasFinder;
 use self::xmas_finder::XMasFinder;
 use self::word_search_parser::WordSearchParser;
-use self::word_search_verifier::WordSearchVerifier;
 use self::word_searcher::WordSearcher;
 
-use crate::{executer_manager::ExecuterManager, pipelined_executer::{try_make_pipeline, PipelinedExecuter}, reader::VecLine, solver::Solve, SanitisedFileReader};
+use crate::{executer_manager::ExecuterManager, helper::table::Table, pipelined_executer::{try_make_pipeline, PipelinedExecuter}, solver::Solve, verifier::TrivialVerifier, SanitisedFileReader, SimpleFileReader};
 
 mod word_search_parser;
 mod word_searcher;
-mod word_search_verifier;
 mod xmas_finder;
 mod cross_mas_finder;
 mod find;
 mod test;
+mod position_utilities;
 
-fn make_pipeline_with<S>(solver: S) -> Result<PipelinedExecuter<VecLine>, String>
-where S: Solve<VecLine> + 'static {
+fn reader() -> SanitisedFileReader {
+    use crate::settings::*;
+
+    SanitisedFileReader::new(
+        SimpleFileReader,
+        LineComment::Pattern(format!("//")),
+        InputEndComment::Pattern(format!("###")),
+        LineTrim::End,
+        EmptyLineTrimming::Both)
+}
+
+fn make_pipeline_with<S>(solver: S) -> Result<PipelinedExecuter<Table<char>>, String>
+where S: Solve<Table<char>> + 'static {
     try_make_pipeline(
-        Ok(SanitisedFileReader::default()),
+        Ok(reader()),
         WordSearchParser::new(), 
-        Ok(WordSearchVerifier::new()),
+        Ok(TrivialVerifier::new::<Table<char>>()),
         Ok(solver))
 }
 
-fn make_pipeline(is_part_2: bool) -> Result<PipelinedExecuter<VecLine>, String> {
+fn make_pipeline(is_part_2: bool) -> Result<PipelinedExecuter<Table<char>>, String> {
     match is_part_2 {
         false => make_pipeline_with(WordSearcher::new(XMasFinder::new)),
         true => make_pipeline_with(WordSearcher::new(CrossMasFinder::new)),

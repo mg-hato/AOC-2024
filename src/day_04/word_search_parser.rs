@@ -1,4 +1,4 @@
-use crate::{parser::Parse, reader::VecLine};
+use crate::{helper::table::Table, parser::Parse, reader::VecLine};
 
 
 mod error {
@@ -25,13 +25,15 @@ impl WordSearchParser {
     }
 }
 
-impl Parse<VecLine> for WordSearchParser {
-    fn parse(&self, vec_line: VecLine) -> Result<VecLine, String> {
-        for line in vec_line.lines.iter() {
+impl Parse<Table<char>> for WordSearchParser {
+    fn parse(&self, vec_line: VecLine) -> Result<Table<char>, String> {
+        let mut rows = vec![];
+        for line in vec_line.lines {
             if !self.line_re.is_match(&line.text) {
                 return Err(error::match_line_error(line.number))
             }
+            rows.push(line.text.chars().collect());
         }
-        Ok(vec_line)
+        Table::new(rows)
     }
 }

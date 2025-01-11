@@ -1,6 +1,6 @@
-use crate::{helper::result::collect, parser::Parse, reader::Line};
+use crate::{helper::{result::collect, table::Table}, parser::Parse, reader::Line};
 
-use super::models::{LaboratoryMap, LaboratoryMapField};
+use super::models::LaboratoryMapField;
 
 pub struct LaboratoryMapParser {
     map_re: regex::Regex,
@@ -43,11 +43,11 @@ impl LaboratoryMapParser {
     }
 }
 
-impl Parse<LaboratoryMap> for LaboratoryMapParser {
-    fn parse(&self, vec_line: crate::reader::VecLine) -> Result<LaboratoryMap, String> {
+impl Parse<Table<LaboratoryMapField>> for LaboratoryMapParser {
+    fn parse(&self, vec_line: crate::reader::VecLine) -> Result<Table<LaboratoryMapField>, String> {
         collect(vec_line.lines.into_iter()
             .map(|line|self.parse_line(&line))
             .collect())
-            .map(LaboratoryMap::new)
+            .and_then(Table::new)
     }
 }

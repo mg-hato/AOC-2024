@@ -1,33 +1,33 @@
-use crate::reader::VecLine;
+use crate::helper::{option::pair_merge, table::Table};
 
-use super::find::Find;
+use super::{find::Find, position_utilities::*};
 
 
 pub struct XMasFinder {
-    wordsearch: Vec<Vec<char>>,
+    wordsearch: Table<char>,
     xmas: Vec<char>,
 }
 
 impl XMasFinder {
-    pub fn new(input: &VecLine) -> XMasFinder {
-        let wordsearch = input.lines.iter().map(|line|line.text.chars().collect()).collect();
+    pub fn new(wordsearch: Table<char>) -> XMasFinder {
         let xmas = "XMAS".chars().collect();
         XMasFinder { wordsearch, xmas }
     }
 
-    fn find_at_with<TF>(&self, row: usize, col: usize, transform: &TF) -> bool
-    where TF: Fn(usize, usize) -> Option<(usize, usize)> {
+    
+    fn find_at_with<TF>(&self, starting_position: (usize, usize), transform: &TF) -> bool
+    where TF: Fn((usize, usize)) -> Option<(usize, usize)> {
         let mut i = 0;
-        let mut position = Some((row, col));
+        let mut position = Some(starting_position);
         while i < self.xmas.len() && position.is_some() {
-            let (r, c) = position.unwrap();
+            let pos = position.unwrap();
             
             // If out of bounds or the letter does not match next expected in "XMAS": break
-            if r >= self.wordsearch.len() || c >= self.wordsearch[r].len() || self.wordsearch[r][c] != self.xmas[i] {
+            if self.wordsearch.get_pos(pos).is_none_or(|&c|c != self.xmas[i]) {
                 break;
             }
 
-            position = transform(r, c);
+            position = transform(pos);
             i += 1;
         }
 
@@ -35,29 +35,29 @@ impl XMasFinder {
         i == self.xmas.len()
     }
 
-    fn find_at(&self, row: usize, col: usize) -> usize {
+    fn count_at(&self, pos: (usize, usize)) -> usize {
         // If not starting with 'X', early quit
         let mut count = 0;
-        if self.wordsearch[row][col] != self.xmas[0] {
+        if self.wordsearch.get_pos(pos).is_none_or(|c|*c != self.xmas[0]) {
             return 0;
         }
 
         for transform in [
-            // Row increasing:
-            |r,c|Some((r + 1, c + 1)), // column increases
-            |r,c|Some((r + 1, c)), // column stays the same
-            |r,c|if c == 0 { None } else { Some((r + 1, c - 1)) }, // column decreases
+            // // Row increasing:
+            |(r,c)|pair_merge(inc(r), inc(c)), // column increases
+            |(r,c)|pair_merge(inc(r), same(c)), // column stays the same
+            |(r,c)|pair_merge(inc(r), dec(c)), // column decreases
 
             // Row static
-            |r,c|Some((r, c + 1)), // column increases
-            |r,c|if c == 0 { None } else { Some((r, c - 1)) }, // column decreases
+            |(r,c)|pair_merge(same(r), inc(c)), // column increases
+            |(r,c)|pair_merge(same(r), dec(c)), // column decreases
 
             // Row decreases
-            |r,c|if r == 0 { None } else { Some((r - 1, c + 1)) }, // column increases
-            |r,c|if r == 0 { None } else { Some((r - 1, c)) }, // column stays the same
-            |r,c|if r == 0 || c == 0 { None } else { Some((r - 1, c - 1)) }, // column decreases
+            |(r,c)|pair_merge(dec(r), inc(c)), // column increases
+            |(r,c)|pair_merge(dec(r), same(c)), // column stays the same
+            |(r,c)|pair_merge(dec(r), dec(c)), // column decreases
         ] {
-            if self.find_at_with(row, col, &transform) {
+            if self.find_at_with(pos, &transform) {
                 count += 1;
             }
         }
@@ -68,10 +68,8 @@ impl XMasFinder {
 impl Find for XMasFinder {
     fn find_all(&self) -> usize {
         let mut counter = 0;
-        for row in 0..self.wordsearch.len() {
-            for col in 0..self.wordsearch[row].len() {
-                counter += self.find_at(row, col);
-            }
+        for (pos, _) in self.wordsearch.iter() {
+            counter += self.count_at(pos);
         }
         counter
     }
