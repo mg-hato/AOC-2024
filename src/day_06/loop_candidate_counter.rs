@@ -1,8 +1,8 @@
 use std::collections::HashSet;
 
-use crate::{answer::{Answer, DisplayableAnswer}, day_06::map_analyser::MapAnalyser, solver::Solve};
+use crate::{answer::{Answer, DisplayableAnswer}, day_06::map_analyser::MapAnalyser, helper::table::Table, solver::Solve};
 
-use super::{adjusted_loop_detector::AdjustedLoopDetector, guard_state::GuardState, loop_detector::{loops, LoopDetector}, models::LaboratoryMap, optimised_caching_loop_detector::OptimisedCachingLoopDetector};
+use super::{adjusted_loop_detector::AdjustedLoopDetector, guard_state::GuardState, loop_detector::{loops, LoopDetector}, models::LaboratoryMapField, optimised_caching_loop_detector::OptimisedCachingLoopDetector};
 
 pub struct LoopCandidateCounter;
 
@@ -33,8 +33,8 @@ impl LoopCandidateCounter {
     }
 }
 
-impl Solve<LaboratoryMap> for LoopCandidateCounter {
-    fn solve(&self, input: LaboratoryMap) -> Result<Answer, String> {
+impl Solve<Table<LaboratoryMapField>> for LoopCandidateCounter {
+    fn solve(&self, input: Table<LaboratoryMapField>) -> Result<Answer, String> {
         MapAnalyser::new(input)
             .and_then(|mut analyser|analyser.perform_analysis()
             .and_then(|path|Self::calculate_loop_count(analyser, path)))

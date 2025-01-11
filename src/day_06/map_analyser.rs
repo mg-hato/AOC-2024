@@ -1,6 +1,8 @@
 use std::collections::{HashMap, HashSet};
 
-use super::{direction::Direction, guard_state::GuardState, loop_detector::LoopDetector, models::{LaboratoryMap, LaboratoryMapField}, next_state::NextState};
+use crate::helper::table::Table;
+
+use super::{direction::Direction, guard_state::GuardState, loop_detector::LoopDetector, models::LaboratoryMapField, next_state::NextState};
 
 pub struct MapAnalyser {
     guard_start_position: (usize, usize),
@@ -17,30 +19,26 @@ mod error {
         format!("{} guard cannot be on a blocked position: ({},{})", PREFIX, row, col)
     }
     
-    pub fn input_verification_error() -> String {
-        format!("{} input needs to be verified", PREFIX)
+    pub fn starting_guard_position_error() -> String {
+        format!("{} exactly one guard starting position is expected", PREFIX)
     }
 }
 
 impl MapAnalyser {
-    pub fn new(lab: LaboratoryMap) -> Result<MapAnalyser, String> {
+    pub fn new(input: Table<LaboratoryMapField>) -> Result<MapAnalyser, String> {
         let mut guard_positions = vec![];
         let mut free_position_map = HashMap::new();
-        
-        for row in 0..lab.map.len() {
-            for col in 0..lab.map[row].len() {
-                let pos = (row, col);
-                let field = lab.map[row][col];
-                free_position_map.insert(pos, field != LaboratoryMapField::Block);
-                if field == LaboratoryMapField::Guard {
-                    guard_positions.push(pos);
-                }
+
+        for (pos, &field) in input.iter() {
+            free_position_map.insert(pos, field != LaboratoryMapField::Block);
+            if field == LaboratoryMapField::Guard {
+                guard_positions.push(pos);
             }
         }
 
         match guard_positions.len() {
             1 => Ok(MapAnalyser { guard_start_position: guard_positions[0], free_position_map }),
-            _ => Err(error::input_verification_error()),
+            _ => Err(error::starting_guard_position_error()),
         }
     }
     
