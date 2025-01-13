@@ -1,0 +1,12 @@
+20202
+
+############
+All used memory edge case
+Visualised: 001122
+
+Part 1 & Part 2:
+Memory is already densely put.
+Nothing is moved.
+We just calculate the check sum:
+0 * (0 + 1) + 1 * (2 + 3) + 2 * (4 + 5)
+= 0 + 5 + 18 = 23
