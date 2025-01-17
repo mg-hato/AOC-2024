@@ -1,0 +1,8 @@
+0202020
+
+########
+All free memory edge case
+Visualised: ......
+
+Part 1 & Part 2:
+Nothing to move. Just calculate trivial checksum: 0

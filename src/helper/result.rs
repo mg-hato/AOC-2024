@@ -1,4 +1,3 @@
-
 /// Zips two results using the zip function and returns a zipped result. Outcomes are as follows:
 /// 1. If `left` is error, returns it.
 /// 2. If `left` is ok and `right` is error, returns `right` error.

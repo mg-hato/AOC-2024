@@ -4,7 +4,7 @@ use self::resonant_harmonics_antinode_calculator::ResonantHarmonicsAntinodeCalcu
 use self::model::AntennaMapField;
 use self::parser::AntennaMapParser;
 
-use crate::{executer_manager::ExecuterManager, helper::table::Table, pipelined_executer::{try_make_pipeline, PipelinedExecuter}, solver::Solve, verifier::TrivialVerifier, SanitisedFileReader};
+use crate::{executer_manager::ExecuterManager, helper::table::Table, pipelined_executer::{try_make_pipeline, PipelinedExecuter}, solver::Solve, verifier::TrivialVerifier, SanitisedFileReader, SimpleFileReader};
 
 mod parser;
 mod antinode_calculator;
@@ -15,10 +15,20 @@ mod antinode_counter;
 mod test;
 mod movement;
 
+fn reader() -> SanitisedFileReader {
+    use crate::settings::*;
+    SanitisedFileReader::new(
+        SimpleFileReader,
+        LineComment::Pattern(format!("//")),
+        InputEndComment::Pattern(format!("####")),
+        LineTrim::End, 
+        EmptyLineTrimming::Both)
+}
+
 fn make_pipeline_with<S>(solver: S) -> Result<PipelinedExecuter<Table<AntennaMapField>>, String>
 where S: Solve<Table<AntennaMapField>> + 'static {
     try_make_pipeline(
-        Ok(SanitisedFileReader::default()),
+        Ok(reader()),
         Ok(AntennaMapParser),
         Ok(TrivialVerifier::new::<Table<AntennaMapField>>()),
         Ok(solver),

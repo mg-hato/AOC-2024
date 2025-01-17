@@ -3,3 +3,4 @@ name = "aoc_2024"
 
 [dependencies]
 regex = "1.11.1"
+segment-tree = "2.0.0"
