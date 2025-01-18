@@ -2,6 +2,8 @@ use std::fmt::Display;
 
 use crate::helper::display::vector_display;
 
+use super::{boundary::Boundary, position::UPosition};
+
 
 /// Table represents a vector of vectors, a container with rows and columns, but with added
 /// guarantee on the shape of the data: all rows will have equal number of entries i.e.
@@ -42,6 +44,11 @@ impl <T> Table<T> {
 
     #[allow(dead_code)]
     pub fn dim(&self) -> (usize, usize) { self.dim }
+
+    pub fn boundary(&self) -> TableBound {
+        let (row, col) = self.dim;
+        TableBound { row, col }
+    }
     
     pub fn get_pos(&self, pos: (usize, usize)) -> Option<&T> {
         let (row, col) = pos;
@@ -85,5 +92,18 @@ impl <'a, T> Iterator for TableIterator<'a, T> {
             self.current_position = (new_r, new_c);
             Some(((r, c), &self.table.table[r][c]))
         }
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct TableBound {
+    row: usize,
+    col: usize,
+}
+
+impl Boundary for TableBound {
+    fn bound(&self, pos: UPosition) -> Option<UPosition> {
+        let UPosition { row, col } = pos;
+        if row < self.row && col < self.col { Some(pos) } else { None }
     }
 }

@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
-use crate::{answer::{Answer, DisplayableAnswer}, helper::table::Table, solver::Solve};
+use crate::{answer::{Answer, DisplayableAnswer}, helper::{position::UPosition, table::Table}, solver::Solve};
 
 use super::{antinode_calculator::AntinodeCalculator, model::AntennaMapField};
 
@@ -43,9 +43,10 @@ impl <AC> Solve<Table<AntennaMapField>> for AntinodeCounter<AC> where AC: Antino
         let mut antinodes = HashSet::new();
         for (_, antennas) in frequency_map {
             for i in 0..antennas.len() {
+                let first = UPosition::new(antennas[i]);
                 for j in i+1..antennas.len() {
-
-                    antinode_calculator.calculate_antinodes((antennas[i], antennas[j]))
+                    let second = UPosition::new(antennas[j]);
+                    antinode_calculator.calculate_antinodes((first, second))
                         .into_iter().for_each(|antinode|{ antinodes.insert(antinode); });
 
                 }

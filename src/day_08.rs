@@ -13,7 +13,6 @@ mod resonant_harmonics_antinode_calculator;
 mod model;
 mod antinode_counter;
 mod test;
-mod movement;
 
 fn reader() -> SanitisedFileReader {
     use crate::settings::*;
