@@ -9,4 +9,8 @@ impl UPosition {
         let (row, col) = pos;
         UPosition { row, col }
     }
+
+    pub fn pos(&self) -> (usize, usize) {
+        (self.row, self.col)
+    }
 }

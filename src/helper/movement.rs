@@ -51,3 +51,45 @@ impl Delta {
         }
     }
 }
+
+#[allow(dead_code)]
+pub mod unit {
+    use super::{Movement, Delta::{Dec, Inc}};
+
+    /// Zero movement
+    pub const ZERO: Movement = Movement(Inc(0), Inc(0));
+
+    /// Decreases row only by 1
+    pub const UP: Movement = Movement(Dec(1), Inc(0));
+
+    /// Increases row only by 1
+    pub const DOWN: Movement = Movement(Inc(1), Inc(0));
+
+    /// Decreases column only by 1
+    pub const LEFT: Movement = Movement(Inc(0), Dec(1));
+
+    /// Increases column only by 1
+    pub const RIGHT: Movement = Movement(Inc(0), Inc(1));
+
+    /// Decreases row by 1, decreases column by 1
+    pub const UP_LEFT: Movement = Movement(Dec(1), Dec(1));
+
+    /// Decreases row by 1, increases column by 1
+    pub const UP_RIGHT: Movement = Movement(Dec(1), Inc(1));
+
+    /// Increases row by 1, decreases column by 1
+    pub const DOWN_LEFT: Movement = Movement(Inc(1), Dec(1));
+
+    /// Increases row by 1, increases column by 1
+    pub const DOWN_RIGHT: Movement = Movement(Inc(1), Inc(1));
+
+    /// All 8 unit directions
+    pub fn all() -> Vec<Movement> {
+        vec![UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT]
+    }
+
+    /// All 4 unit partial directions: up, right, down, left
+    pub fn all_partial() -> Vec<Movement> {
+        vec![UP, RIGHT, DOWN, LEFT]
+    }
+}
