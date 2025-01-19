@@ -51,7 +51,7 @@ impl Find for XMasFinder {
     fn find_all(&self) -> usize {
         let mut counter = 0;
         for (pos, _) in self.wordsearch.iter() {
-            counter += self.count_at(UPosition::new(pos));
+            counter += self.count_at(pos);
         }
         counter
     }

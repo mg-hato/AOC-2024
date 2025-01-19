@@ -40,7 +40,7 @@ impl CrossMasFinder {
 impl Find for CrossMasFinder {
     fn find_all(&self) -> usize {
         self.wordsearch.iter()
-            .filter(|&(pos, _)|self.is_cross_mas_at(UPosition::new(pos)))
+            .filter(|&(pos, _)|self.is_cross_mas_at(pos))
             .count()
     }
 }

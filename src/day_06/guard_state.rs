@@ -1,3 +1,5 @@
+use crate::helper::{movement::{Delta, Movement}, position::UPosition};
+
 use super::direction::Direction;
 
 #[derive(Eq, PartialEq, Hash, Clone, Copy, Debug)]
@@ -5,34 +7,38 @@ use super::direction::Direction;
 /// - current position as number-pair `(r,c)`: row `r`, column `c` (both 0-indexed)
 /// - current facing direction
 pub struct GuardState {
-    pub position: (usize, usize),
+    pub position: UPosition,
     pub direction: Direction,
 }
 
 impl GuardState {
-    pub fn new(position: (usize, usize), direction: Direction) -> GuardState {
+    pub fn new(position: UPosition, direction: Direction) -> GuardState {
         GuardState { position, direction }
     }
 
-    /// Returns the guard's next position assuming there are no obstacles in front of the guard.
-    pub fn next_position(&self) -> Option<(usize, usize)> {
-        self.direction.next(self.position)
+    /// Returns unit movement corresponding to current facing direction
+    pub fn movement(&self) -> Movement {
+        self.direction.movement()
     }
 
+    /// Returns guard state after performing directional rotation
     pub fn rotate(&self) -> GuardState {
         GuardState::new(self.position, self.direction.rotate())
     }
 
-    /// Returns true if and only if the guard is facing the given position
-    pub fn is_facing(&self, position: (usize, usize)) -> bool {
-        let (guard_row, guard_col) = self.position;
-        let (pos_row, pos_col) = position;
 
-        match self.direction {
-            Direction::Up => guard_col == pos_col && guard_row > pos_row,
-            Direction::Right => guard_row == pos_row && guard_col < pos_col,
-            Direction::Down => guard_col == pos_col && guard_row < pos_row,
-            Direction::Left => guard_row == pos_row && guard_col > pos_col,
-        }
+    /// Returns true iff two delta changes are "matching":
+    /// - both are zero deltas
+    /// - both are NOT zero deltas and are of the same delta-direction
+    fn delta_match(lhs: Delta, rhs: Delta) -> bool {
+        (lhs.is_zero() == rhs.is_zero()) // both are zeros or both are not zeros
+            && (lhs.is_zero() || lhs.is_same_dir(rhs)) // and they are zeros or they are same delta direction
+    }
+
+    /// Returns true if and only if the guard is facing the given position
+    pub fn is_facing(&self, position: UPosition) -> bool {
+        let Movement { row: row_diff, col: col_diff } = Movement::infer(self.position, position);
+        let Movement { row: row_dir, col: col_dir} = self.movement();
+        Self::delta_match(row_diff, row_dir) && Self::delta_match(col_diff, col_dir)
     }
 }
