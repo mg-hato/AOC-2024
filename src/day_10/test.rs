@@ -11,4 +11,10 @@ pub mod suite {
         let pipeline = make_pipeline(false).unwrap();
         test_whole_flow(&pipeline, REL_FILEPATHS[0], DisplayableAnswer::new(36));
     }
+    
+    #[test]
+    pub fn test_whole_flow_pt2_example() {
+        let pipeline = make_pipeline(true).unwrap();
+        test_whole_flow(&pipeline, REL_FILEPATHS[0], DisplayableAnswer::new(81));
+    }
 }
