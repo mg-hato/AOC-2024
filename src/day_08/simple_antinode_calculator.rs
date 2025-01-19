@@ -1,28 +1,25 @@
-use crate::helper::table::Table;
+use crate::helper::{boundary::apply, movement::Movement, position::UPosition, table::{Table, TableBound}};
 
-use super::{antinode_calculator::AntinodeCalculator, model::AntennaMapField, movement::Movement};
+use super::{antinode_calculator::AntinodeCalculator, model::AntennaMapField};
 
 /// A simple `AntinodeCalculator` implementation where a pair of antennas will produce
 /// exactly two antinodes on the line that crosses through the pair on each end
 pub struct SimpleAntinodeCalculator {
-    map: Table<AntennaMapField>,
+    boundaries: TableBound,
 }
 impl SimpleAntinodeCalculator {
     pub fn new(map: Table<AntennaMapField>) -> SimpleAntinodeCalculator {
-        SimpleAntinodeCalculator { map }
+        SimpleAntinodeCalculator { boundaries: map.boundary() }
     }
 }
 
 impl AntinodeCalculator for SimpleAntinodeCalculator {
-    fn calculate_antinodes(&self, antennas: ((usize, usize), (usize, usize))) -> Vec<(usize, usize)> {
+    fn calculate_antinodes(&self, antennas: (UPosition, UPosition)) -> Vec<UPosition> {
         let (first, second) = antennas;
+        let movement = Movement::infer(first, second);
         [
-            Movement::infer(first, second).apply(second),
-            Movement::infer(second, first).apply(first),
-        ]   
-            .iter()
-            .map_while(|&position|position)
-            .filter(|&position|self.map.get_pos(position).is_some())
-            .collect()
+            apply(self.boundaries, movement, second),
+            apply(self.boundaries, movement.inverse(), first),
+        ].iter().filter_map(|&x|x).collect()
     }
 }

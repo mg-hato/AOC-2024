@@ -1,6 +1,6 @@
-use crate::helper::{option::pair_merge, table::Table};
+use crate::helper::{boundary::{self, Boundary}, movement::{self, Movement}, position::UPosition, table::Table};
 
-use super::{find::Find, position_utilities::*};
+use super::find::Find;
 
 
 pub struct XMasFinder {
@@ -14,20 +14,16 @@ impl XMasFinder {
         XMasFinder { wordsearch, xmas }
     }
 
-    
-    fn find_at_with<TF>(&self, starting_position: (usize, usize), transform: &TF) -> bool
-    where TF: Fn((usize, usize)) -> Option<(usize, usize)> {
+    fn find_at_with(&self, starting_position: UPosition, movement: Movement) -> bool {
         let mut i = 0;
-        let mut position = Some(starting_position);
+        let mut position = self.wordsearch.boundary().bound(starting_position);
         while i < self.xmas.len() && position.is_some() {
             let pos = position.unwrap();
             
             // If out of bounds or the letter does not match next expected in "XMAS": break
-            if self.wordsearch.get_pos(pos).is_none_or(|&c|c != self.xmas[i]) {
-                break;
-            }
+            if *self.wordsearch.get_pos(pos.pos()).unwrap() != self.xmas[i] { break; }
 
-            position = transform(pos);
+            position = boundary::apply(self.wordsearch.boundary(), movement, pos);
             i += 1;
         }
 
@@ -35,29 +31,15 @@ impl XMasFinder {
         i == self.xmas.len()
     }
 
-    fn count_at(&self, pos: (usize, usize)) -> usize {
+    fn count_at(&self, pos: UPosition) -> usize {
         // If not starting with 'X', early quit
         let mut count = 0;
-        if self.wordsearch.get_pos(pos).is_none_or(|c|*c != self.xmas[0]) {
+        if self.wordsearch.get_pos(pos.pos()).is_none_or(|c|*c != self.xmas[0]) {
             return 0;
         }
 
-        for transform in [
-            // // Row increasing:
-            |(r,c)|pair_merge(inc(r), inc(c)), // column increases
-            |(r,c)|pair_merge(inc(r), same(c)), // column stays the same
-            |(r,c)|pair_merge(inc(r), dec(c)), // column decreases
-
-            // Row static
-            |(r,c)|pair_merge(same(r), inc(c)), // column increases
-            |(r,c)|pair_merge(same(r), dec(c)), // column decreases
-
-            // Row decreases
-            |(r,c)|pair_merge(dec(r), inc(c)), // column increases
-            |(r,c)|pair_merge(dec(r), same(c)), // column stays the same
-            |(r,c)|pair_merge(dec(r), dec(c)), // column decreases
-        ] {
-            if self.find_at_with(pos, &transform) {
+        for movement in movement::unit::all() {
+            if self.find_at_with(pos, movement) {
                 count += 1;
             }
         }

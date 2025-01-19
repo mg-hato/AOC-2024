@@ -1,22 +1,25 @@
+use crate::helper::position::UPosition;
+
 use super::{guard_state::GuardState, loop_detector::LoopDetector, next_state::NextState};
 
 /// A loop detector produced from another loop detector
 /// under assumption that an obstacle has been added
 pub struct AdjustedLoopDetector<'a> {
     underylying: Box::<&'a mut dyn LoopDetector>,
-    obstacle: (usize, usize),
+    obstacle: UPosition,
 }
 
 mod error {
+    use crate::helper::position::UPosition;
+
     const PREFIX: &str = "[AdjustedLoopDetector]";
-    pub fn guard_on_obstacle(position: (usize, usize)) -> String {
-        let (r, c) = position;
-        format!("{} the guard cannot ever be on the placed obstacle at ({},{})", PREFIX, r, c)
+    pub fn guard_on_obstacle(position: UPosition) -> String {
+        format!("{} the guard cannot ever be on the placed obstacle at {}", PREFIX, position)
     }
 }
 
 impl AdjustedLoopDetector<'_> {
-    pub fn new<D>(loop_detector: &mut D, obstacle: (usize, usize)) -> AdjustedLoopDetector
+    pub fn new<D>(loop_detector: &mut D, obstacle: UPosition) -> AdjustedLoopDetector
     where D: LoopDetector {
         AdjustedLoopDetector { underylying: Box::new(loop_detector),  obstacle }
     }

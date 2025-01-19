@@ -11,7 +11,6 @@ mod xmas_finder;
 mod cross_mas_finder;
 mod find;
 mod test;
-mod position_utilities;
 
 fn reader() -> SanitisedFileReader {
     use crate::settings::*;
