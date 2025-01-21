@@ -1,8 +1,8 @@
 use std::collections::{HashMap, HashSet};
 
-use crate::helper::{boundary::apply, movement::Movement, position::UPosition, table::{Table, TableBound}};
+use crate::helper::{boundary::apply, direction::Direction, movement::Movement, position::UPosition, table::{Table, TableBound}};
 
-use super::{direction::Direction, guard_state::GuardState, loop_detector::LoopDetector, models::LaboratoryMapField, next_state::NextState};
+use super::{guard_state::GuardState, loop_detector::LoopDetector, models::LaboratoryMapField, next_state::NextState};
 
 pub struct MapAnalyser {
     guard_start_position: UPosition,

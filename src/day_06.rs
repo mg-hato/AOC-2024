@@ -11,7 +11,6 @@ mod distinct_visiting_positions_counter;
 mod loop_candidate_counter;
 mod test;
 mod map_analyser;
-mod direction;
 mod guard_state;
 mod loop_detector;
 mod next_state;
