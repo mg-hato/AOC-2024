@@ -21,7 +21,7 @@ impl XMasFinder {
             let pos = position.unwrap();
             
             // If out of bounds or the letter does not match next expected in "XMAS": break
-            if *self.wordsearch.get_pos(pos.pos()).unwrap() != self.xmas[i] { break; }
+            if *self.wordsearch.get_pos(pos).unwrap() != self.xmas[i] { break; }
 
             position = boundary::apply(self.wordsearch.boundary(), movement, pos);
             i += 1;
@@ -34,7 +34,7 @@ impl XMasFinder {
     fn count_at(&self, pos: UPosition) -> usize {
         // If not starting with 'X', early quit
         let mut count = 0;
-        if self.wordsearch.get_pos(pos.pos()).is_none_or(|c|*c != self.xmas[0]) {
+        if self.wordsearch.get_pos(pos).is_none_or(|c|*c != self.xmas[0]) {
             return 0;
         }
 

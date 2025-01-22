@@ -33,7 +33,7 @@ impl FencePriceCalculator {
     fn analyse_region(&self, map: &Table<char>, member_position: UPosition) -> (HashSet<FenceUnit>, HashSet<UPosition>) {
         let mut fence = HashSet::new();
         let mut region = HashSet::new();
-        let region_plant_type = match map.get_pos(member_position.pos()) {
+        let region_plant_type = match map.get_pos(member_position) {
             Some(&plant_type) => plant_type,
             None => return (fence, region),
         };
@@ -47,7 +47,7 @@ impl FencePriceCalculator {
             for dir in direction::Direction::all() {
                 // next is `Some(pos)` if it is on the map and of the same plant type
                 let next = apply(map.boundary(), dir.movement(), position)
-                    .filter(|pos|*map.get_pos(pos.pos()).unwrap() == region_plant_type);
+                    .filter(|&pos|*map.get_pos(pos).unwrap() == region_plant_type);
                 
                 if let Some(pos) = next {
                     queue.push(pos);
