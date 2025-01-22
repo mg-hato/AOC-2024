@@ -14,7 +14,9 @@ impl UPosition {
 
     pub fn zero() -> UPosition { UPosition::new((0, 0)) }
 
-    pub fn pos(&self) -> (usize, usize) {
+    #[allow(dead_code)]
+    /// Returns it as pair of `usize` : `(row, col)`
+    pub fn as_pair(&self) -> (usize, usize) {
         (self.row, self.col)
     }
 }

@@ -14,7 +14,7 @@ impl CrossMasFinder {
     }
 
     fn is_position_ms(&self, first: UPosition, second: UPosition) -> bool {
-        match (self.wordsearch.get_pos(first.pos()), self.wordsearch.get_pos(second.pos())) {
+        match (self.wordsearch.get_pos(first), self.wordsearch.get_pos(second)) {
             (Some(&fst), Some(&snd)) => Self::is_ms(fst, snd),
             _ => false
         }
@@ -28,7 +28,7 @@ impl CrossMasFinder {
     }
 
     fn is_cross_mas_at(&self, pos: UPosition) -> bool {
-        self.wordsearch.get_pos(pos.pos()).is_some_and(|&c|c == 'A') // center letter is 'A'
+        self.wordsearch.get_pos(pos).is_some_and(|&c|c == 'A') // center letter is 'A'
         && [movement::unit::UP_LEFT, movement::unit::UP_RIGHT].iter().all(|&movement|{
             let first = apply(self.wordsearch.boundary(), movement, pos);
             let second = apply(self.wordsearch.boundary(), movement.inverse(), pos);

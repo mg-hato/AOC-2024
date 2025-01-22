@@ -51,8 +51,8 @@ impl <T> Table<T> {
         TableBound { row, col }
     }
     
-    pub fn get_pos(&self, pos: (usize, usize)) -> Option<&T> {
-        let (row, col) = pos;
+    pub fn get_pos(&self, pos: UPosition) -> Option<&T> {
+        let UPosition { row, col } = pos;
         self.get(row, col)
     }
 
