@@ -1,8 +1,12 @@
 use std::collections::HashSet;
 
-use crate::{answer::{Answer, DisplayableAnswer}, helper::{boundary::apply, movement, table::Table}, solver::Solve};
+use crate::{answer::{Answer, DisplayableAnswer}, helper::{boundary::apply, direction, position::UPosition, table::Table}, solver::Solve};
 
-pub struct FencePriceCalculator;
+use super::{fence_unit::FenceUnit, perimiter_calculate::PerimiterCalculate};
+
+pub struct FencePriceCalculator {
+    perimiter_calculator: Box<dyn PerimiterCalculate>
+}
 
 mod error {
     const PREFIX: &str = "[Solver D-12]";
@@ -13,6 +17,9 @@ mod error {
 }
 
 impl FencePriceCalculator {
+    pub fn new<PC>(perimiter_calculator: PC) -> FencePriceCalculator where PC: PerimiterCalculate + 'static {
+        FencePriceCalculator { perimiter_calculator: Box::new(perimiter_calculator) }
+    }
 
     fn region_pricing_step(price_acc: u64, new_region_perimeter: u64, new_region_area: u64) -> Result<u64, String> {
         new_region_perimeter.checked_mul(new_region_area)
@@ -20,39 +27,57 @@ impl FencePriceCalculator {
             .ok_or_else(||error::overlflow(price_acc, new_region_perimeter, new_region_area))
     }
 
-    fn price(map: Table<char>) -> Result<u64, String> {
-        let mut total_price = Ok(0);
+    /// Analyses the same plant type region whose member field is at the position provided.
+    /// Returns a pair of `(F, P)` where `F` is a set of `FenceUnit` representing the border of the region
+    /// and `P` is a set of `UPosition` representing the member positions.
+    fn analyse_region(&self, map: &Table<char>, member_position: UPosition) -> (HashSet<FenceUnit>, HashSet<UPosition>) {
+        let mut fence = HashSet::new();
+        let mut region = HashSet::new();
+        let region_plant_type = match map.get_pos(member_position.pos()) {
+            Some(&plant_type) => plant_type,
+            None => return (fence, region),
+        };
 
-        // done - set of already processed and accounted nodes
+        let mut queue = vec![member_position];
+        while !queue.is_empty() {
+            let position = queue.pop().unwrap();
+
+            if region.contains(&position) { continue; }
+
+            for dir in direction::Direction::all() {
+                // next is `Some(pos)` if it is on the map and of the same plant type
+                let next = apply(map.boundary(), dir.movement(), position)
+                    .filter(|pos|*map.get_pos(pos.pos()).unwrap() == region_plant_type);
+                
+                if let Some(pos) = next {
+                    queue.push(pos);
+                } else {
+                    fence.insert(FenceUnit::new(position, dir));
+                }
+            }
+            region.insert(position);
+        }
+
+        (fence, region)
+    }
+
+    fn price(&self, map: Table<char>) -> Result<u64, String> {
+        let mut total_price = Ok(0);
         let mut done = HashSet::new();
 
-        for (position, &region_plant_type) in map.iter() {
+        for (position, _) in map.iter() {
 
-            // if already processed: skip
             if done.contains(&position) { continue; }
 
-            let mut perimeter = 0;
-            let mut area = 0;
-            let mut queue = vec![position]; // contains only positions whose type of plant is `c`
+            let (fence, region) = self.analyse_region(&map, position);
+            let area = region.len() as u64;
+            region.into_iter().for_each(|p|{ done.insert(p); });
 
-            while !queue.is_empty() {
-                let position = queue.pop().unwrap();
-                if done.contains(&position) { continue; }
+            let perimiter_multiplier = self.perimiter_calculator.calculate(fence);
+            
+            total_price =  total_price
+                .and_then(|price|Self::region_pricing_step(price, perimiter_multiplier, area));
 
-                let neighbours = movement::unit::all_partial().iter()
-                    .filter_map(|&movement|apply(map.boundary(), movement, position))
-                    .filter(|upos|map.get_pos(upos.pos()).is_some_and(|&plant_type|plant_type == region_plant_type))
-                    .collect::<Vec<_>>();
-
-                // account for perimeter & area contribution of the current position
-                perimeter = perimeter + 4 - (neighbours.len() as u64);
-                area += 1;
-                done.insert(position);
-
-                neighbours.into_iter().for_each(|p|{ queue.push(p); });
-            }
-            // Now that the region is finished, calculate fence price for it
-            total_price =  total_price.and_then(|price|Self::region_pricing_step(price, perimeter, area));
         }
         total_price
     }
@@ -60,6 +85,6 @@ impl FencePriceCalculator {
 
 impl Solve<Table<char>> for FencePriceCalculator {
     fn solve(&self, input: Table<char>) -> Result<Answer, String> {
-        Self::price(input).map(DisplayableAnswer::new)
+        self.price(input).map(DisplayableAnswer::new)
     }
 }

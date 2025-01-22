@@ -1,3 +1,5 @@
+use self::discounted_perimiter_calculator::DiscountedPerimiterCalculator;
+use self::standard_perimiter_calculator::StandardPerimiterCalculator;
 use self::fence_price_calculator::FencePriceCalculator;
 use self::parser::GardenParser;
 
@@ -6,6 +8,10 @@ use crate::{executer_manager::ExecuterManager, helper::table::Table, pipelined_e
 
 mod parser;
 mod fence_price_calculator;
+mod fence_unit;
+mod perimiter_calculate;
+mod standard_perimiter_calculator;
+mod discounted_perimiter_calculator;
 mod test;
 
 fn reader() -> SanitisedFileReader {
@@ -30,8 +36,8 @@ where S: Solve<Table<char>> + 'static {
 
 fn make_pipeline(is_part_2: bool) -> Result<PipelinedExecuter<Table<char>>, String> {
     match is_part_2 {
-        false => make_pipeline_with(FencePriceCalculator),
-        true  => make_pipeline_with(FencePriceCalculator),
+        false => make_pipeline_with(FencePriceCalculator::new(StandardPerimiterCalculator)),
+        true  => make_pipeline_with(FencePriceCalculator::new(DiscountedPerimiterCalculator)),
     }
 }
 
