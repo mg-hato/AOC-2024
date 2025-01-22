@@ -1,6 +1,4 @@
-use ExecuterManager;
-
-use crate::{parser::TrivialParser, pipelined_executer::{try_make_pipeline, PipelinedExecuter}, reader::VecLine, solver::Solve, verifier::TrivialVerifier, SimpleFileReader};
+use crate::{executer_manager::ExecuterManager, parser::TrivialParser, pipelined_executer::{try_make_pipeline, PipelinedExecuter}, reader::VecLine, solver::Solve, verifier::TrivialVerifier, SimpleFileReader};
 
 mod mul_extractor;
 mod instruction;
