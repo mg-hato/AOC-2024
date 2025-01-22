@@ -1,4 +1,4 @@
-use crate::helper::{movement::{self, Movement}, position::UPosition};
+use crate::helper::{movement::Movement, position::UPosition};
 
 #[derive(Clone, Copy, Eq, PartialEq, Hash, Debug)]
 /// Represents the movement direction. Becase the read input goes from top to bottom (row-wise),
@@ -14,6 +14,8 @@ pub enum Direction {
     Left,
 }
 
+use self::Direction::*;
+
 impl Direction {
     /// Given the current position, returns an option to the next position that corresponds
     /// to `Direction` of `self`. Because position is described as `(row, col)` where `row` and `col`
@@ -23,23 +25,28 @@ impl Direction {
         self.movement().apply(current)
     }
 
+    pub fn all() -> Vec<Direction> {
+        vec![Up, Right, Down, Left]
+    }
+
     /// Returns the corresponding unit movement for the direction
     pub fn movement(&self) -> Movement {
+        use crate::helper::movement::unit::*;
         match self {
-            Direction::Up    => movement::unit::UP,
-            Direction::Right => movement::unit::RIGHT,
-            Direction::Down  => movement::unit::DOWN,
-            Direction::Left  => movement::unit::LEFT,
+            Up    => UP,
+            Right => RIGHT,
+            Down  => DOWN,
+            Left  => LEFT,
         }
     }
 
     /// Returns direction after one rotation (clockwise)
     pub fn rotate(&self) -> Direction {
         match self {
-            Direction::Up    => Direction::Right,
-            Direction::Right => Direction::Down,
-            Direction::Down  => Direction::Left,
-            Direction::Left  => Direction::Up,
+            Up    => Right,
+            Right => Down,
+            Down  => Left,
+            Left  => Up,
         }
     }
 }

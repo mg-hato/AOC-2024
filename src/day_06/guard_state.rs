@@ -1,6 +1,4 @@
-use crate::helper::{movement::{Delta, Movement}, position::UPosition};
-
-use super::direction::Direction;
+use crate::helper::{direction::Direction, movement::{Delta, Movement}, position::UPosition};
 
 #[derive(Eq, PartialEq, Hash, Clone, Copy, Debug)]
 /// A guard's state:
