@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use crate::{answer::{Answer, DisplayableAnswer}, helper::{boundary::apply, direction, position::UPosition, table::Table}, solver::Solve};
+use crate::{answer::{Answer, DisplayableAnswer}, helper::{boundary::Boundary, direction, position::UPosition, table::Table}, solver::Solve};
 
 use super::{fence_unit::FenceUnit, perimiter_calculate::PerimiterCalculate};
 
@@ -46,7 +46,7 @@ impl FencePriceCalculator {
 
             for dir in direction::Direction::all() {
                 // next is `Some(pos)` if it is on the map and of the same plant type
-                let next = apply(map.boundary(), dir.movement(), position)
+                let next = map.boundary().apply(dir.movement(), position)
                     .filter(|&pos|*map.get_pos(pos).unwrap() == region_plant_type);
                 
                 if let Some(pos) = next {

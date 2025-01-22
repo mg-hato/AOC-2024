@@ -1,5 +1,5 @@
 
-use crate::{answer::{Answer, DisplayableAnswer}, helper::{boundary::apply, movement, position::UPosition, table::Table}, solver::Solve};
+use crate::{answer::{Answer, DisplayableAnswer}, helper::{boundary::Boundary, movement, position::UPosition, table::Table}, solver::Solve};
 
 use super::review::Review;
 
@@ -33,7 +33,7 @@ impl <R: Review> TrailheadReviewAnalyser<R> {
 
             // Analyse all 4 directions and see if the  it is an even, gradual, uphill slope
             for movement in movement::unit::all_partial() {
-                let next = apply(map.boundary(), movement, current);
+                let next = map.boundary().apply(movement, current);
                 if next.is_some_and(|p|*map.get_pos(p).unwrap() == height + 1) {
                     positions.push(next.unwrap());
                 }
