@@ -1,8 +1,8 @@
 use std::{num::ParseIntError, vec};
 
-use crate::{helper::{position::UPosition, result::{self, collect}}, parser::Parse, reader::{Line, VecLine}};
+use crate::{helper::result::{self, collect}, parser::Parse, reader::{Line, VecLine}};
 
-use super::model::{ClawMachine, ClawMachines};
+use super::model::{ClawMachine, ClawMachines, Position};
 
 
 pub struct ClawMachinesParser {
@@ -81,18 +81,18 @@ impl ClawMachinesParser {
         }
     }
 
-    fn parse_number<ERRF>(number: &str, err_fn: ERRF) -> Result<usize, String>
+    fn parse_number<ERRF>(number: &str, err_fn: ERRF) -> Result<u64, String>
     where ERRF: Fn(ParseIntError) -> String {
         number.parse().map_err(err_fn)
     }
 
-    fn parse_uposition<ERRF>(line: &Line, re: &regex::Regex, err_fn: ERRF) -> Result<UPosition, String>
+    fn parse_uposition<ERRF>(line: &Line, re: &regex::Regex, err_fn: ERRF) -> Result<Position, String>
     where ERRF: Fn(usize) -> String {
         if let Some((_, [x, y])) = re.captures(&line.text).map(|c|c.extract()) {
             result::zip(
                 Self::parse_number(x, |e|error::parse_number(x, line.number, e)),
                 Self::parse_number(y, |e|error::parse_number(y, line.number, e)),
-                |x, y|UPosition::new((x, y))
+                |x, y|Position{ x, y }
             )
         } else {
             Err((err_fn)(line.number))

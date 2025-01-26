@@ -8,6 +8,7 @@ use crate::{executer_manager::ExecuterManager, pipelined_executer::{try_make_pip
 mod model;
 mod parser;
 mod claw_machines_analyser;
+mod single_solution_solver;
 mod test;
 
 fn make_pipeline_with<S>(solver: S) -> Result<PipelinedExecuter<ClawMachines>, String>
@@ -20,10 +21,11 @@ where S: Solve<ClawMachines> + 'static {
 }
 
 fn make_pipeline(is_part_2: bool) -> Result<PipelinedExecuter<ClawMachines>, String> {
-    match is_part_2 {
-        false => make_pipeline_with(ClawMachineAnalyser),
-        true  => make_pipeline_with(ClawMachineAnalyser),
-    }
+    let tweak = match is_part_2 {
+        false => 0,
+        true  => 10_000_000_000_000,
+    };
+    make_pipeline_with(ClawMachineAnalyser::new_with_tweak(tweak, tweak))
 }
 
 pub fn register(manager: ExecuterManager) -> Result<ExecuterManager, String> {

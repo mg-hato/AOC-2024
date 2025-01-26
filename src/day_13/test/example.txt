@@ -13,3 +13,59 @@ Prize: X=7870, Y=6450
 Button A: X+69, Y+23
 Button B: X+27, Y+71
 Prize: X=18641, Y=10279
+
+############
+
+For part 2 we have not been  given exact information on what the solution is.
+So I have used a bit of Excel / Google Sheet to work it out. Steps pasted down below:
+
+				
+Tweak	10000000000000			
+				
+Button A X movement	34	26	17	69
+Button A Y movement	94	66	86	23
+Button B X movement	22	67	84	27
+Button B Y movement	67	21	37	71
+Prize X coordinate	8400	12748	7870	18641
+Prize Y coordinate	5400	12176	6450	10279
+Modified prize X coordinate	10000000008400	10000000012748	10000000007870	10000000018641
+Modified prize Y coordinate	10000000005400	10000000012176	10000000006450	10000000010279
+				
+Eq on X coefficient on A	34	26	17	69
+Eq on X coefficient on B	22	67	84	27
+Eq on X result	10000000008400	10000000012748	10000000007870	10000000018641
+				
+Eq on Y coefficient on A	94	66	86	23
+Eq on Y coefficient on B	67	21	37	71
+Eq on Y result	10000000005400	10000000012176	10000000006450	10000000010279
+				
+First let us multiply each equation so that A button is on the same coefficient				
+				
+Eq on X coefficient on A	3196	1716	1462	1587
+Eq on X coefficient on B	2068	4422	7224	621
+Eq on X result	940000000789600	660000000841368	860000000676820	230000000428743
+				
+Eq on Y coefficient on A	3196	1716	1462	1587
+Eq on Y coefficient on B	2278	546	629	4899
+Eq on Y result	340000000183600	260000000316576	170000000109650	690000000709251
+				
+Now we subtract equations to obtain an equation with unknown B only				
+				
+Multiplier of B	-210	3876	6595	-4278
+Result	600000000606000	400000000524792	690000000567170	-460000000280508
+				
+Unknown B resolved	-2857142860029	103199174542	104624715780	107526881786
+				
+Unknown A resolved	2142857144971	118679050709	71266110728	102851800151
+				
+Is resolved A whole	FALSE	TRUE	FALSE	TRUE
+Is resolved B whole	FALSE	TRUE	FALSE	TRUE
+				
+Is resolved A non-negative	TRUE	TRUE	TRUE	TRUE
+Is resolved B non-negative	FALSE	TRUE	TRUE	TRUE
+				
+Are solutions valid	FALSE	TRUE	FALSE	TRUE
+				
+Tokens needed	0	459236326669	0	416082282239
+				
+All tokens	875318608908			
