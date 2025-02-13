@@ -1,0 +1,30 @@
+#######
+#...#.#
+#.....#
+#..OO@#
+#..O..#
+#.....#
+#######
+
+<vv<<^^<<^^
+
+============
+Comment:
+This example mainly was used to illustrate how one box can push two boxes at the time.
+We were not given the result, but we were given how the map looks at the end of the movements:
+
+##############
+##...[].##..##
+##...@.[]...##
+##....[]....##
+##..........##
+##..........##
+##############
+
+So we have three boxes:
+ ROW   COL
+  1     5
+  2     7
+  3     6
+
+So that's going to be (1 + 2 + 3) * 100 + (5 + 7 + 6) = 600 + 18 = 618
