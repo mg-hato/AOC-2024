@@ -1,13 +1,16 @@
-use lowest_score_calculator::LowestScoreCalculator;
+use reindeer_maze_solver::ReindeerMazeSolver;
 use model::Field;
 use parser::ReindeerMazeParser;
+use reindeer_path_analyser::{LowestScoreAnalyser, OptimalPathFieldAnalyser};
 
 use crate::{executer_manager::ExecuterManager, helper::table::Table, pipelined_executer::{try_make_pipeline, PipelinedExecuter}, reading::{SanitisedFileReader, SimpleFileReader}, solver::Solve, verifier::TrivialVerifier};
 
 mod model;
 mod parser;
 mod test;
-mod lowest_score_calculator;
+mod state;
+mod reindeer_path_analyser;
+mod reindeer_maze_solver;
 
 fn reader() -> SanitisedFileReader {
     use crate::reading::settings::*;
@@ -31,7 +34,11 @@ where S: Solve<Table<Field>> + 'static {
 }
 
 fn make_pipeline(is_part_2: bool) -> Result<PipelinedExecuter<Table<Field>>, String> {
-    make_pipeline_with(LowestScoreCalculator)
+    match is_part_2 {
+        false => make_pipeline_with(ReindeerMazeSolver::new(LowestScoreAnalyser)),
+        true  => make_pipeline_with(ReindeerMazeSolver::new(OptimalPathFieldAnalyser)),
+    }
+    
 }
 
 pub fn register(manager: ExecuterManager) -> Result<ExecuterManager, String> {

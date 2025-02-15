@@ -20,4 +20,17 @@ pub mod suite {
         test_whole_flow(&pipeline, REL_FILEPATHS[1], DisplayableAnswer::new(11_048));
 
     }
+
+    #[test]
+    pub fn test_whole_flow_part_2_first_example() {
+        let pipeline = make_pipeline(true).unwrap();
+        test_whole_flow(&pipeline, REL_FILEPATHS[0], DisplayableAnswer::new(45));
+    }
+
+    #[test]
+    pub fn test_whole_flow_part_2_second_example() {
+        let pipeline = make_pipeline(true).unwrap();
+        test_whole_flow(&pipeline, REL_FILEPATHS[1], DisplayableAnswer::new(64));
+
+    }
 }
