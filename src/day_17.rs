@@ -1,5 +1,6 @@
 use model::ProgramInformation;
 use parser::ProgramInformationParser;
+use program_copy_resolver::ProgramCopyResolver;
 use program_simulator::ProgramSimulator;
 
 use crate::{executer_manager::ExecuterManager, pipelined_executer::{try_make_pipeline, PipelinedExecuter}, reading::SanitisedFileReader, solver::Solve, verifier::TrivialVerifier};
@@ -7,6 +8,7 @@ use crate::{executer_manager::ExecuterManager, pipelined_executer::{try_make_pip
 mod model;
 mod parser;
 mod program_simulator;
+mod program_copy_resolver;
 mod test;
 
 
@@ -23,7 +25,7 @@ where S: Solve<ProgramInformation> + 'static {
 fn make_pipeline(is_part_2: bool) -> Result<PipelinedExecuter<ProgramInformation>, String> {
     match is_part_2 {
         false => make_pipeline_with(ProgramSimulator::new(200)),
-        true  => make_pipeline_with(ProgramSimulator::new(200)),
+        true  => make_pipeline_with(ProgramCopyResolver::new(200)),
     }
     
 }

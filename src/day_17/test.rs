@@ -4,6 +4,7 @@ pub mod suite {
 
     const REL_FILEPATHS: &[&str] = &[
         "src/day_17/test/example.txt", // Example given on AOC24
+        "src/day_17/test/example_part_two.txt", // Example given on AOC24
     ];
 
     #[test]
@@ -12,5 +13,11 @@ pub mod suite {
         let result = vector_display(&output, ",");
         let pipeline = make_pipeline(false).unwrap();
         test_whole_flow(&pipeline, REL_FILEPATHS[0], DisplayableAnswer::new(result));
+    }
+
+    #[test]
+    pub fn test_whole_flow_part_2_example_part_two() {
+        let pipeline = make_pipeline(true).unwrap();
+        test_whole_flow(&pipeline, REL_FILEPATHS[1], DisplayableAnswer::new(117_440));
     }
 }
