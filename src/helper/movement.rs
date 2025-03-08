@@ -1,6 +1,6 @@
 use super::position::UPosition;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Eq, PartialEq, Hash, Debug)]
 pub struct Movement {
     pub row: Delta,
     pub col: Delta,
@@ -33,7 +33,7 @@ impl Movement {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Eq, PartialEq, Hash, Debug)]
 pub enum Delta {
     Inc(usize),
     Dec(usize),
