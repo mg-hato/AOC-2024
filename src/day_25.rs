@@ -4,6 +4,9 @@ use crate::{day_25::{keylock_match_analyser::KeyLockMatchAnalyser, model::KeyLoc
 mod model;
 mod schematics_parser;
 mod keylock_match_analyser;
+mod keylock_converter;
+mod key_lock;
+mod test;
 
 fn reader() -> SanitisedFileReader {
     use crate::reading::settings::*;
@@ -26,15 +29,11 @@ where S: Solve<KeyLockSchematics> + 'static {
     )
 }
 
-fn make_pipeline(is_part_2: bool) -> Result<PipelinedExecuter<KeyLockSchematics>, String> {
-    match is_part_2 {
-        false => make_pipeline_with(KeyLockMatchAnalyser),
-        true => make_pipeline_with(KeyLockMatchAnalyser),
-    }
+fn make_pipeline() -> Result<PipelinedExecuter<KeyLockSchematics>, String> {
+    make_pipeline_with(KeyLockMatchAnalyser)
 }
 
 
 pub fn register(manager: ExecuterManager) -> Result<ExecuterManager, String> {
-    manager.try_register(25, false, make_pipeline(false), false)
-        ?.try_register(25, true, make_pipeline(true), false)
+    manager.try_register(25, false, make_pipeline(), false)
 }

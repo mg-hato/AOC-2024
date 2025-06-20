@@ -15,6 +15,22 @@ impl Display for KeyLockSchematics {
 #[derive(Eq, PartialEq, Clone, Debug)]
 pub struct KeyLockSchema(pub Table<KeyLockSpace>);
 
+impl KeyLockSchema {
+    pub fn columns(&self) -> Vec<Vec<KeyLockSpace>> {
+        let mut columns = vec![];
+        let KeyLockSchema(table) = self;
+        let (row_count, columns_count) = table.dim();
+        for column_idx in 0..columns_count {
+            let mut current_column = vec![];
+            for row_idx in 0..row_count {
+                current_column.push(*table.get(row_idx, column_idx).unwrap());
+            }
+            columns.push(current_column);
+        }
+        columns
+    }
+}
+
 impl Display for KeyLockSchema {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let KeyLockSchema(schema) = self;
@@ -24,16 +40,16 @@ impl Display for KeyLockSchema {
 
 #[derive(Eq, PartialEq, Clone, Copy, Debug)]
 pub enum KeyLockSpace {
-    Busy,
+    Block,
 
-    Free,
+    Space,
 }
 
 impl Display for KeyLockSpace {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", match self {
-            KeyLockSpace::Busy => '#',
-            KeyLockSpace::Free => '.',
+            KeyLockSpace::Block => '#',
+            KeyLockSpace::Space => '.',
         })
     }
 }

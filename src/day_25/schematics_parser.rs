@@ -23,7 +23,7 @@ impl SchematicsParser {
     fn parse_line(line: &Line) -> Result<Vec<KeyLockSpace>, String> {
         if line.text.chars().all(|c|c == '.' || c == '#') {
             Ok(line.text.chars()
-                .map(|c|if c == '.' { KeyLockSpace::Free } else { KeyLockSpace::Busy })
+                .map(|c|if c == '.' { KeyLockSpace::Space } else { KeyLockSpace::Block })
                 .collect())
         } else {
             Err(error::unexpected_chars(line.number))
