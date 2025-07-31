@@ -5,3 +5,4 @@ edition = "2021"
 [dependencies]
 regex = "1.11.1"
 segment-tree = "2.0.0"
+string-builder = "0.2.0"

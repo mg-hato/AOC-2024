@@ -1,0 +1,44 @@
+// We intentionally change a bit here and ruin the "my_example.txt"
+x00: 0
+x01: 1
+x02: 0
+x03: 1
+y00: 1
+y01: 1
+y02: 1
+y03: 0
+
+// carry bits will be denoted with prefix c
+// XOR of input bits will be denoted with prefix d
+x00 XOR y00 -> z00
+x00 AND y00 -> c00 // carry
+
+x01 XOR y01 -> d01 // xor
+d01 XOR c00 -> z01 // this will be the general formula
+
+// carry from x01 and y01
+x01 AND y01 -> p01
+x01 AND c00 -> q01
+y01 AND c00 -> r01
+p01 OR q01 -> s01
+r01 OR s01 -> c01 // carry 
+
+x02 XOR y02 -> d03 // we swap d03 with d02
+d02 XOR c01 -> z02
+
+// carry from x02 and y02
+x02 AND y02 -> p02
+x02 AND c01 -> q02
+y02 AND c01 -> r02
+p02 OR q02 -> s02
+r02 OR s02 -> c02 // carry
+
+x03 XOR y03 -> d02 // we swap d03 with d02
+d03 XOR c02 -> z03
+
+// carry from x03 and y03
+x03 AND y03 -> p03
+x03 AND c02 -> q03
+y03 AND c02 -> r03
+p03 OR q03 -> s03
+r03 OR s03 -> z04 // carry goes into last Z-bit
