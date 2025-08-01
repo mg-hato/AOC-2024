@@ -55,3 +55,10 @@ Now, folder/file structure revisited with this knowledge. E.g. day 10. In `./src
 ## Testing
 
 With this pipelined-approach to days, there's a lot of helper methods in `./src/testing` folder to make it easier to write full-pipeline integration-like tests on day-basis. Each day is usually tested against the example given by the AOC 2024 website.
+
+## More README
+
+I will not pack all the information in this README - too much to share. So navigate throught the folder structure of the project to find more READMEs where appropriate.
+
+They are available at the following folders:
+- day specific code folder (such as `./src/day_05`) and they will describe ideas used to solve the problem as well as any other interesting bits, with information on time needed to run the pipelines on the actual input that is specific to me. The time is measured as follows, I run the program against a day input and select part 1 or 2 using `Measure-Command` on Windows. I repeat that few times and take one of the stats rounded up/down or not to my liking.
