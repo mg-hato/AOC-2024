@@ -1,4 +1,4 @@
-# Day 03
+# Day 03 - Corrupted Mul instructions
 
 ## General solution
 
@@ -22,3 +22,9 @@ The accumulator carries the following information in that pair, call it `(n, b)`
  Here, we "toggle on" the ignoring logic, so that `Do` and `Don't` instructions affect the `ignore`/`b` boolean of the accumulator.
 
  Basically the mul-processing logic with or without conditional instruction recognition is in method `process_instruction` and the only diff between the two parts is the boolean value of `MulExtractor` called `conditional_detection` being assigned differently by "constructor" call (i.e. Rust, `new` method). The rest falls into pieces (probably)?
+
+ ## Time
+
+ Part 1: 96 ms
+
+ Part 2: 94 ms

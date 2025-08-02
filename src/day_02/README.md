@@ -33,3 +33,13 @@ Okay, now we have those safety-prefixes and safety-suffixes. First task, is the 
 Okay, so now we can drop one number from the sequence and if the resulting reduced-sequence is safe, we say that such sequence passes the criteria.
 
 Say we decide to drop number `sequence[i]`, the reduced sequence will be `safe-prefix[i]` (enum status of `sequence[0..i)` not including i-th) plus `safe-suffix[i+1]` (enum status of `sequence[i+1..]`). If those two prefix and suffix enums are "compatible" (see code), the sequence becomes safe by dropping i-th element.
+
+## Time
+
+Part 1: 109 milliseconds
+
+Part 2: 110 milliseconds
+
+Comment: I ran quite a bit of retries here and interestingly I was getting quite often that part 2 solution was taking less time. Usually around 90ish millis whereas part 1 was averaging about 100 millis, which maybe feels counter-intuitive? That's it, it's a funny info. I'm not gonna bother explaining it or reasoning more about it.
+
+But I did write down like one of the "worst" (slowest) times for part 2.
